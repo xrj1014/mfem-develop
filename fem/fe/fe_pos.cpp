@@ -30,7 +30,12 @@ void PositiveFiniteElement::Project(
       const IntegrationPoint &ip = Nodes.IntPoint(i);
       Trans.SetIntPoint(&ip);
       dofs(i) = coeff.Eval(Trans, ip);
+      if(map_type == INTEGRAL)
+      {
+         dofs(i) *= Trans.Weight();
+      }
    }
+   
 }
 
 void PositiveFiniteElement::Project(
@@ -44,6 +49,10 @@ void PositiveFiniteElement::Project(
       const IntegrationPoint &ip = Nodes.IntPoint(i);
       Trans.SetIntPoint(&ip);
       vc.Eval (x, Trans, ip);
+      if (map_type == INTEGRAL)
+      {
+         x *= Trans.Weight();
+      }
       for (int j = 0; j < x.Size(); j++)
       {
          dofs(dof*j+i) = x(j);
